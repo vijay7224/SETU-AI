@@ -1,136 +1,428 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TPO Portal - Login & Registration</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='logincss.css') }}">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SETU • Placement Bridge</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" 
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    :root {
+      --primary: #9d4edd;
+      --primary-dark: #7c3aed;
+      --gradient: linear-gradient(135deg, #7c3aed, #c084fc, #9d4edd, #7c3aed);
+      --glass: rgba(255,255,255,0.07);
+      --glass-hover: rgba(255,255,255,0.14);
+      --text: #f1e9ff;
+      --text-muted: #c9b8e8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100dvh;
+      background: radial-gradient(circle at 15% 15%, #22004a, #0a001f 60%);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .container {
+      width:  min(960px, 94vw);
+      height: min(620px, 92vh);
+      display: flex;
+      border-radius: 28px;
+      overflow: hidden;
+      background: var(--glass);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 80px rgba(157, 78, 221, 0.22);
+      border: 1px solid rgba(157,78,221,0.18);
+
+      opacity: 0;
+      transform: translateY(70px) scale(0.94);
+      animation: pageEnter 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.2s,
+                 float 14s ease-in-out infinite;
+    }
+
+    @keyframes pageEnter {
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+      50%      { transform: translateY(-22px) rotate(0.4deg) scale(1.008); }
+    }
+
+    /* LEFT PANEL - Animated background */
+    .left-panel {
+      flex: 1;
+      background: var(--gradient);
+      background-size: 300% 300%;
+      animation: movingGradient 12s ease infinite;
+      padding: 4rem 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes movingGradient {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .left-panel::before {
+      content: "";
+      position: absolute;
+      inset: -50%;
+      background: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.14), transparent 65%);
+      animation: pulse 14s infinite ease-in-out;
+      pointer-events: none;
+    }
+
+    .welcome-wrapper {
+      white-space: nowrap;           /* ← This forces one line */
+      overflow: hidden;
+    }
+
+    .left-panel h1 {
+      font-size: clamp(2.6rem, 5.5vw, 3.4rem); /* responsive but not too big */
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 1.1rem;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.45);
+      line-height: 1.1;
+    }
+
+    .left-panel h1 span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: letterAppear 0.8s forwards;
+    }
+
+    @keyframes letterAppear {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .left-panel p {
+      font-size: 1.12rem;
+      opacity: 0.9;
+      line-height: 1.55;
+      max-width: 420px;
+    }
+
+    /* RIGHT PANEL and rest remains mostly same */
+    .right-panel {
+      flex: 1;
+      padding: 3.8rem 3.2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-toggle {
+      display: flex;
+      margin-bottom: 2.2rem;
+    }
+
+    .form-toggle button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.28rem;
+      font-weight: 500;
+      padding-bottom: 0.6rem;
+      margin-right: 2.2rem;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .form-toggle button.active {
+      color: white;
+    }
+
+    .form-toggle button.active::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #c084fc, #9d4edd);
+      animation: underlineGrow 0.5s ease-out forwards;
+    }
+
+    @keyframes underlineGrow {
+      to { transform: scaleX(1); }
+    }
+
+    .auth-form {
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.55s ease-out;
+    }
+
+    .auth-form.active {
+      display: block;
+      opacity: 1;
+      transform: none;
+    }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 0.9rem 1.3rem;
+      margin: 1.1rem 0;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .input-group:focus-within,
+    .input-group:hover {
+      background: var(--glass-hover);
+      border-color: rgba(157,78,221,0.5);
+      box-shadow: 0 0 0 4px rgba(157,78,221,0.2);
+    }
+
+    .input-group::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(192,132,255,0.3), transparent);
+      transform: translateX(-150%);
+      transition: transform 0.9s;
+    }
+
+    .input-group:focus-within::before {
+      transform: translateX(150%);
+    }
+
+    .input-group i {
+      color: var(--primary);
+      font-size: 1.35rem;
+      margin-right: 1rem;
+    }
+
+    .input-group input {
+      background: none;
+      border: none;
+      outline: none;
+      color: white;
+      font-size: 1.05rem;
+      width: 100%;
+    }
+
+    .input-group input::placeholder {
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    .role-select {
+      display: flex;
+      gap: 0.8rem;
+      margin: 0.8rem 0 1.8rem;
+      flex-wrap: wrap;
+    }
+
+    .role-btn {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-muted);
+      padding: 0.65rem 1.4rem;
+      border-radius: 50px;
+      font-size: 0.98rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .role-btn:hover { background: rgba(255,255,255,0.15); color: white; transform: scale(1.06); }
+
+    .role-btn.active {
+      background: linear-gradient(90deg, #7c3aed, #c084fc);
+      color: white;
+      box-shadow: 0 6px 20px rgba(124,58,237,0.4);
+      transform: translateY(-2px) scale(1.04);
+      animation: wave 2.8s ease-in-out infinite;
+    }
+
+    @keyframes wave {
+      0%,100% { transform: translateY(-2px) scale(1.04); }
+      50%     { transform: translateY(-7px) scale(1.08); }
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1.05rem;
+      margin-top: 1.6rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: white;
+      background: var(--gradient);
+      background-size: 200% 200%;
+      animation: btnGradient 6s ease infinite;
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(124,58,237,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes btnGradient {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-4px) scale(1.04);
+      box-shadow: 0 18px 50px rgba(157,78,221,0.65);
+    }
+
+    .submit-btn:active { transform: translateY(-1px) scale(0.98); }
+
+    .note, .form-note {
+      font-size: 0.87rem;
+      color: var(--text-muted);
+      margin-top: 1.1rem;
+      text-align: center;
+      opacity: 0.85;
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity: 0.3; transform: scale(1); }
+      50%     { opacity: 0.6; transform: scale(1.2); }
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
 
-    <!-- LEFT PANEL -->
-    <div class="left-panel">
-      <div class="welcome-text">
-        <h1>Welcome to <span>VASTRA</span></h1>
-        <p>Bridge between Training & Placement Officer, Students and HR</p>
+<div class="container">
+
+  <div class="left-panel">
+    <div>
+      <div class="welcome-wrapper">
+        <h1 id="welcome-title" >Welcome to </h1>
       </div>
-    </div>
-
-    <!-- RIGHT PANEL -->
-    <div class="right-panel">
-
-      <!-- Toggle buttons -->
-      <div class="form-toggle">
-        <button id="loginBtn" class="active">Login</button>
-        <button id="registerBtn">Register</button>
-      </div>
-
-      <!-- LOGIN FORM -->
-      <form id="loginForm" class="auth-form active" method="POST" action="/login">
-
-        <div class="role-selector">
-            <label>Select Role</label>
-            <div class="role-buttons">
-                <button type="button" class="role-btn active" data-role="tpo">
-                    <i class="fas fa-user-shield"></i> TPO
-                </button>
-                <button type="button" class="role-btn" data-role="student">
-                    <i class="fas fa-user-graduate"></i> Student
-                </button>
-                <button type="button" class="role-btn" data-role="hr">
-                    <i class="fas fa-user-tie"></i> HR
-                </button>
-            </div>
-            <!-- Hidden field to send role -->
-            <input type="hidden" id="loginRole" name="role" value="tpo">
-        </div>
-
-        <div class="input-group">
-            <i class="fas fa-envelope"></i>
-            <input type="email" name="email" placeholder="Email" required>
-        </div>
-
-        <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" name="password" placeholder="Password" required>
-        </div>
-
-        <button type="submit" class="submit-btn">
-            Login <i class="fas fa-arrow-right"></i>
-        </button>
-
-        <p class="form-note">
-            <i class="fas fa-info-circle"></i> Students: Use registered email. TPO approval required.
-        </p>
-
-      </form>
-
-      <!-- REGISTER FORM -->
-      <form id="registerForm" class="auth-form" method="POST" action="/register">
-        <div class="note">
-          <i class="fas fa-exclamation-triangle"></i> Registration for Students only
-        </div>
-
-        <div class="input-group">
-          <i class="fas fa-user"></i>
-          <input type="text" name="fullname" placeholder="Full Name" required>
-        </div>
-
-        <div class="input-group">
-          <i class="fas fa-envelope"></i>
-          <input type="email" name="email" placeholder="Email" required>
-        </div>
-
-        <div class="input-group">
-          <i class="fas fa-lock"></i>
-          <input type="password" name="password" placeholder="Password" required>
-        </div>
-
-        <div class="input-group">
-          <i class="fas fa-id-card"></i>
-          <input type="text" name="enrollment" placeholder="Enrollment No" required>
-        </div>
-
-        <button type="submit" class="submit-btn">
-          Register <i class="fas fa-arrow-right"></i>
-        </button>
-      </form>
-
+      <p>Connecting students, TPO & recruiters in one modern placement ecosystem.</p>
     </div>
   </div>
 
-  <!-- JS -->
-  <script>
-    // Toggle between login/register
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
-    const loginBtn = document.getElementById('loginBtn');
-    const registerBtn = document.getElementById('registerBtn');
+  <div class="right-panel">
 
-    loginBtn.addEventListener('click', () => {
-      loginForm.classList.add('active');
-      registerForm.classList.remove('active');
-      loginBtn.classList.add('active');
-      registerBtn.classList.remove('active');
-    });
+    <div class="form-toggle">
+      <button id="loginBtn" class="active">Login</button>
+      <button id="registerBtn">Register</button>
+    </div>
 
-    registerBtn.addEventListener('click', () => {
-      registerForm.classList.add('active');
-      loginForm.classList.remove('active');
-      registerBtn.classList.add('active');
-      loginBtn.classList.remove('active');
-    });
+    <form id="loginForm" class="auth-form active" method="POST" action="/login">
+      <div class="role-select">
+        <button type="button" class="role-btn active" data-role="tpo">TPO</button>
+        <button type="button" class="role-btn" data-role="student">Student</button>
+        <button type="button" class="role-btn" data-role="hr">HR / Recruiter</button>
+      </div>
+      <input type="hidden" id="loginRole" name="role" value="tpo">
 
-    // Role selector for login
-    document.querySelectorAll('.role-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('loginRole').value = btn.dataset.role;
-      });
-    });
-  </script>
+      <div class="input-group">
+        <i class="fa-solid fa-envelope"></i>
+        <input type="email" name="email" placeholder="Email address" required autocomplete="email"/>
+      </div>
+
+      <div class="input-group">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" name="password" placeholder="Password" required autocomplete="current-password"/>
+      </div>
+
+      <button type="submit" class="submit-btn">Sign In</button>
+      <p class="form-note">Students: Account needs TPO approval after registration.</p>
+    </form>
+
+    <form id="registerForm" class="auth-form" method="POST" action="/register">
+      <p class="note">Registration open for <strong>students</strong> only.</p>
+
+      <div class="input-group">
+        <i class="fa-solid fa-user"></i>
+        <input type="text" name="fullname" placeholder="Full Name" required autocomplete="name"/>
+      </div>
+
+      <div class="input-group">
+        <i class="fa-solid fa-envelope"></i>
+        <input type="email" name="email" placeholder="College Email" required autocomplete="email"/>
+      </div>
+
+      <div class="input-group">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" name="password" placeholder="Create Password" required autocomplete="new-password"/>
+      </div>
+
+      <div class="input-group">
+        <i class="fa-solid fa-id-card-clip"></i>
+        <input type="text" name="enrollment" placeholder="Enrollment Number" required/>
+      </div>
+
+      <button type="submit" class="submit-btn">Create Account</button>
+    </form>
+
+  </div>
+</div>
+
+<script>
+// Letter animation
+const title = document.getElementById('welcome-title');
+title.innerHTML = title.textContent
+  .split('')
+  .map(char => `<span>${char === ' ' ? '&nbsp;' : char}</span>`)
+  .join('');
+
+document.querySelectorAll('#welcome-title span').forEach((span, i) => {
+  span.style.animationDelay = `${0.07 * i + 0.5}s`;
+});
+
+// Toggle forms
+const loginBtn = document.getElementById('loginBtn');
+const registerBtn = document.getElementById('registerBtn');
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
+
+loginBtn.onclick = () => {
+  loginForm.classList.add('active');
+  registerForm.classList.remove('active');
+  loginBtn.classList.add('active');
+  registerBtn.classList.remove('active');
+};
+
+registerBtn.onclick = () => {
+  registerForm.classList.add('active');
+  loginForm.classList.remove('active');
+  registerBtn.classList.add('active');
+  loginBtn.classList.remove('active');
+};
+
+// Role buttons
+document.querySelectorAll('.role-btn').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('loginRole').value = btn.dataset.role;
+  };
+});
+</script>
+
 </body>
 </html>

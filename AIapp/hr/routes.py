@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for,session
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
@@ -9,6 +9,11 @@ hr_bp = Blueprint("hr", __name__, url_prefix="/hr")
 client = MongoClient("mongodb://localhost:27017/")
 db = client["placement_db"]
 students_col = db["students"]
+# ---------- WELCOME ----------
+@hr_bp.route("/welcome")
+def welcome():
+    return render_template("hr_welcome.html")
+
 
 # ---------- HR Dashboard ----------
 @hr_bp.route("/dashboard")
@@ -78,3 +83,7 @@ def view_student(id):
         return "Student Not Found", 404
 
     return render_template("student_profile.html", student=student)
+@hr_bp.route("/logout")
+def logout():
+    session.clear()   # 👈 saari session values remove
+    return redirect(url_for("auth.index"))

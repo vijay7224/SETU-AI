@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Companies • SETU TPO</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #00e0ff;
+      --accent: #00ffdd;
+      --glass: rgba(30, 35, 55, 0.22);
+      --glass-border: rgba(0, 212, 255, 0.28);
+      --radius: 20px;
+      --radius-sm: 12px;
+      --shadow: 0 12px 35px rgba(0, 212, 255, 0.18);
+      --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #1e1b4b, #0c1a27, #1e293b);
+      background-size: 400% 400%;
+      animation: gradient 30s ease infinite;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    @keyframes gradient {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .main {
+      padding: 40px 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h2, h3 {
+      background: linear-gradient(90deg, #a5f3fc, #00e0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+
+    .summary-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      text-align: center;
+      padding: 24px 18px;
+      backdrop-filter: blur(12px);
+      transition: var(--transition);
+    }
+
+    .summary-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow);
+    }
+
+    .summary-icon {
+      font-size: 2.4rem;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .summary-number {
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, #a5f3fc, #00e0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card-glass {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 0 20px rgba(0,212,255,0.08);
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .table {
+      color: #e0f2fe;
+      width: 100%;
+      min-width: 1100px;
+    }
+
+    .table thead th {
+      background: rgba(0, 212, 255, 0.22);
+      color: #a5f3fc;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.82rem;
+      padding: 16px 18px;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .table tbody tr {
+      background: #0a0f1a;
+    }
+
+    .table tbody tr:nth-child(odd) {
+      background: #0d1321;
+    }
+
+    .table tbody tr:hover {
+      background: rgba(0, 212, 255, 0.24);
+      transform: translateY(-2px);
+    }
+
+    .table td {
+      padding: 16px 18px;
+      vertical-align: middle;
+    }
+
+    .badge-status {
+      padding: 7px 16px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      min-width: 110px;
+      text-align: center;
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.3);
+    }
+
+    .bg-upcoming  { background: linear-gradient(135deg, #fbbf24, #facc15); color: #422c00; }
+    .bg-active    { background: linear-gradient(135deg, #10d981, #34d399); color: #021f12; }
+    .bg-completed { background: linear-gradient(135deg, #3b82f6, #60a5fa); color: white; }
+
+    .search-box {
+      max-width: 450px;
+    }
+
+    @media (max-width: 576px) {
+      .summary-number { font-size: 2rem; }
+      .table, .compare-table { min-width: 900px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+      <h2>Registered Companies & Top Recruiters</h2>
+      
+      <div class="input-group search-box">
+        <span class="input-group-text bg-transparent border-0 text-white">
+          <i class="fas fa-search"></i>
+        </span>
+        <input type="text" class="form-control bg-dark border-0 text-white" 
+               id="searchInput" placeholder="Search name, package, location...">
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row g-4 mb-5">
+      <div class="col-md-3 col-6">
+        <div class="summary-card">
+          <i class="fas fa-building summary-icon"></i>
+          <div class="summary-number counter" data-target="42">0</div>
+          <small>Total Companies</small>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="summary-card">
+          <i class="fas fa-calendar-alt summary-icon"></i>
+          <div class="summary-number counter" data-target="18">0</div>
+          <small>Upcoming Drives</small>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="summary-card">
+          <i class="fas fa-play-circle summary-icon"></i>
+          <div class="summary-number counter" data-target="7">0</div>
+          <small>Active Drives</small>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="summary-card">
+          <i class="fas fa-check-double summary-icon"></i>
+          <div class="summary-number counter" data-target="215">0</div>
+          <small>Students Placed</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top 10 Comparison Table -->
+    <h3 class="mb-4">Top 10 Companies Comparison (Campus Placements 2025–2026 Trends)</h3>
+    <div class="card-glass mb-5">
+      <div class="table-responsive p-3">
+        <table class="table table-hover align-middle mb-0 compare-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Company</th>
+              <th>Avg Package Freshers (LPA)</th>
+              <th>Highest Reported (LPA)</th>
+              <th>Main Roles</th>
+              <th>Key Locations</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Google India</td>
+              <td>20–35</td>
+              <td>50+</td>
+              <td>SDE, AI/ML, Cloud</td>
+              <td>Bengaluru, Hyderabad</td>
+              <td>Premium product-based, high competition</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Microsoft India</td>
+              <td>18–30</td>
+              <td>45+</td>
+              <td>SDE, Cloud, Data</td>
+              <td>Hyderabad, Bengaluru, Noida</td>
+              <td>Strong learning + stocks</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Amazon India</td>
+              <td>15–28</td>
+              <td>40+</td>
+              <td>SDE, Operations, Data</td>
+              <td>Bengaluru, Hyderabad, Chennai</td>
+              <td>High volume + fast growth</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Goldman Sachs / JPMorgan</td>
+              <td>18–25</td>
+              <td>35+</td>
+              <td>Analyst, Tech Roles</td>
+              <td>Bengaluru, Mumbai</td>
+              <td>Finance-tech hybrid, high pay</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Infosys</td>
+              <td>5–12</td>
+              <td>15–20</td>
+              <td>System Engineer, Specialist</td>
+              <td>Pan-India</td>
+              <td>Mass recruiter, good training</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>TCS</td>
+              <td>4–9</td>
+              <td>12–18</td>
+              <td>ASE, Digital Roles</td>
+              <td>Pan-India</td>
+              <td>Largest mass recruiter</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Accenture</td>
+              <td>6–14</td>
+              <td>18–25</td>
+              <td>Consulting, Tech</td>
+              <td>Pan-India</td>
+              <td>Consulting + tech mix</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>HCLTech</td>
+              <td>5–12</td>
+              <td>15+</td>
+              <td>Engineer, Digital</td>
+              <td>Noida, Chennai, Bengaluru</td>
+              <td>Engineering + IT services</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>Wipro</td>
+              <td>5–11</td>
+              <td>15+</td>
+              <td>Project Engineer</td>
+              <td>Bengaluru, Pune</td>
+              <td>Strong campus presence</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>Tech Mahindra / Capgemini</td>
+              <td>5–12</td>
+              <td>15–20</td>
+              <td>Software Engineer</td>
+              <td>Pune, Mumbai, Hyderabad</td>
+              <td>Telecom + IT focus</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Existing Registered Companies Table (example) -->
+    <h3 class="mb-4">Your Registered Companies</h3>
+    <div class="card-glass">
+      <div class="table-responsive p-3">
+        <table class="table table-hover align-middle mb-0" id="companiesTable">
+          <thead>
+            <tr>
+              <th>Company Name</th>
+              <th>Location</th>
+              <th>Package (LPA)</th>
+              <th>Drive Date</th>
+              <th>Status</th>
+              <th>Students Applied</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Your dynamic rows here -->
+            <tr>
+              <td><strong>Google India</strong><small class="d-block text-muted">careers.google.com</small></td>
+              <td>Bengaluru</td>
+              <td>18–32</td>
+              <td>15 Mar 2026</td>
+              <td><span class="badge-status bg-upcoming">Upcoming</span></td>
+              <td>124</td>
+              <td>
+                <a href="#" class="btn btn-sm btn-outline-info"><i class="fas fa-eye"></i> View</a>
+              </td>
+            </tr>
+            <!-- Add more... -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Counter animation
+    document.querySelectorAll('.counter').forEach(counter => {
+      const target = +counter.getAttribute('data-target') || 0;
+      let count = 0;
+      const inc = target / 70;
+      const update = () => {
+        count += inc;
+        counter.innerText = Math.ceil(count);
+        if (count < target) setTimeout(update, 18);
+        else counter.innerText = target;
+      };
+      if (target > 0) update();
+    });
+
+    // Unified search for both tables
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const filter = this.value.toLowerCase();
+      document.querySelectorAll('.table tbody tr').forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(filter) ? '' : 'none';
+      });
+    });
+  </script>
+
+</body>
+</html>

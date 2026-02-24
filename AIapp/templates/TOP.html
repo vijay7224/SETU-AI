@@ -1,137 +1,512 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <title>TPO Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TPO Dashboard • SETU</title>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
-    body { background-color: #3d92d8; }
-    .summary-card {
-      border-radius: 10px;
-      border: none;
-      box-shadow: 0 2px 6px rgba(187, 110, 110, 0.06);
+    :root {
+      --primary:        #00e0ff;
+      --primary-dark:   #00b7eb;
+      --primary-glow:   rgba(0, 224, 255, 0.18);
+      --glass:          rgba(30, 35, 55, 0.14);
+      --glass-border:   rgba(0, 212, 255, 0.22);
+      --glass-blur:     blur(16px);
+      --text:           #f8fbff;
+      --text-muted:     rgba(248, 251, 255, 0.78);
+      --text-subtle:    rgba(248, 251, 255, 0.55);
+      --shadow-sm:      0 8px 24px rgba(0, 0, 0, 0.42);
+      --shadow-md:      0 16px 48px rgba(0, 0, 0, 0.55);
+      --radius-xl:      1.6rem;
+      --transition:     all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .status-badge { font-size: 0.75rem; }
-    .recommend-tag { font-size: 0.75rem; }
+
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0c1a27 100%);
+      background-size: 300% 300%;
+      animation: gradientFlow 28s ease infinite;
+      color: var(--text);
+      min-height: 100vh;
+      margin: 0 !important;
+      padding: 0 !important;
+      font-family: system-ui, -apple-system, sans-serif;
+      letter-spacing: -0.01em;
+      overflow-x: hidden;
+    }
+
+    @keyframes gradientFlow {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .sidebar {
+      width: 272px;
+      min-height: 100vh;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-right: 1px solid var(--glass-border);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-shadow: 6px 0 32px rgba(0,0,0,0.58);
+      transition: var(--transition);
+    }
+
+    .sidebar-header {
+      padding: 2.2rem 1.8rem;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.14);
+      text-align: center;
+    }
+
+    .sidebar-header h5 {
+      color: #00ffdd;
+      font-weight: 900;
+      letter-spacing: 4px;
+      font-size: 2rem;
+      margin: 0;
+      background: linear-gradient(90deg, #00ffdd, #00c9ff, #00ffdd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% auto;
+      animation: textShine 4s linear infinite;
+    }
+
+    @keyframes textShine {
+      0% { background-position: 0% center; }
+      100% { background-position: -200% center; }
+    }
+
+    .sidebar .menu-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #a5f3ff;
+      padding: 1.2rem 1.8rem 0.6rem;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      border-bottom: 1px solid rgba(0,212,255,0.12);
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      padding: 1.15rem 1.8rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .sidebar a i {
+      width: 26px;
+      margin-right: 14px;
+      font-size: 1.25rem;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: rgba(0, 212, 255, 0.11);
+      color: #00ffdd;
+      transform: translateX(6px);
+    }
+
+    .sidebar a.active {
+      background: linear-gradient(to right, rgba(0,212,255,0.18), transparent);
+      border-left: 5px solid #00ffdd;
+      color: white;
+      font-weight: 550;
+    }
+
+    .main-content {
+      margin-left: 272px;
+      padding: 2.8rem 2.4rem;
+      min-height: 100vh;
+    }
+
+    .summary-card {
+      background: var(--glass);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      text-align: center;
+      padding: 1.8rem 1.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .summary-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 24px 56px rgba(0, 212, 255, 0.28);
+    }
+
+    .summary-icon {
+      font-size: 2.6rem;
+      margin-bottom: 0.9rem;
+      color: #00ffdd;
+    }
+
+    .summary-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #00ffdd, #00c9ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .table-responsive {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      background: rgba(20, 25, 45, 0.4);
+      backdrop-filter: blur(10px);
+    }
+
+    .table thead th {
+      background: rgba(0, 212, 255, 0.12);
+      color: #a5f3ff;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.24);
+      padding: 1rem 1.25rem;
+    }
+
+    .table tbody tr:hover {
+      background: rgba(0, 212, 255, 0.09);
+      transform: scale(1.005);
+    }
+
+    .badge-status {
+      padding: 0.55em 1.1em;
+      font-weight: 550;
+      border-radius: 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .bg-eligible   { background: #10d981; color: #0f2e1a; }
+    .bg-onhold     { background: #fbbf24; color: #442e05; }
+    .bg-placed     { background: #60a5fa; color: #1e3a5f; }
+
+    .btn-sm {
+      font-weight: 550;
+      padding: 0.55rem 1rem;
+      border-radius: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .btn-success:hover  { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,0.4); }
+    .btn-warning:hover  { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(251,191,36,0.4); }
+    .btn-info:hover     { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(59,130,246,0.4); }
+
+    .card {
+      background: var(--glass);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+    }
+
+    .form-control, .form-select {
+      background: rgba(30, 40, 60, 0.7);
+      border: 1px solid rgba(0, 212, 255, 0.25);
+      color: white;
+      border-radius: 0.85rem;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: #00d4ff;
+      box-shadow: 0 0 0 0.25rem rgba(0, 212, 255, 0.22);
+    }
+
+    .sidebar-toggle {
+      width: 64px;
+      height: 64px;
+      font-size: 1.6rem;
+      background: linear-gradient(135deg, #00d4ff, #00aaff);
+      border: none;
+      border-radius: 50%;
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.5);
+      color: white;
+      z-index: 2000;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 15px 40px rgba(0, 212, 255, 0.65);
+    }
+
+    @media (max-width: 992px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.show { transform: translateX(0); }
+      .main-content {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding: 5rem 1rem 1rem !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      .container-fluid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .summary-number { font-size: 2rem; }
+      .summary-icon   { font-size: 2.2rem; }
+      .sidebar-toggle { width: 56px; height: 56px; font-size: 1.4rem; }
+    }
   </style>
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-dark bg-dark">
-  <div class="container-fluid">
-    <span class="navbar-brand">TPO Dashboard</span>
-    <span class="navbar-text text-white">Training & Placement Officer</span>
+<!-- Sidebar (using offcanvas for mobile) -->
+<div class="sidebar offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="sidebarMenuLabel">TPO Portal</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
-</nav>
-
-<div class="container-fluid mt-3">
-
-  <!-- Summary Cards -->
-  <div class="row g-3">
-    <div class="col-md-3">
-      <div class="card summary-card text-center"><div class="card-body"><h6>Total Students</h6><h3>{{ total }}</h3></div></div>
+  <div class="offcanvas-body p-0">
+    <!-- Menu Title Added Here -->
+    <div class="sidebar-header">
+      <h5>Menu</h5>
     </div>
-    <div class="col-md-3">
-      <div class="card summary-card text-center"><div class="card-body"><h6>Eligible</h6><h3>{{ eligible }}</h3></div></div>
-    </div>
-    <div class="col-md-3">
-      <div class="card summary-card text-center"><div class="card-body"><h6>Placed</h6><h3>{{ placed }}</h3></div></div>
-    </div>
-    <div class="col-md-3">
-      <div class="card summary-card text-center"><div class="card-body"><h6>Recommended</h6><h3>{{ recommended }}</h3></div></div>
-    </div>
-  </div>
 
-  <!-- Filters -->
-  <div class="card mt-4"><div class="card-body">
-    <form method="get" class="row g-2" action="{{ url_for('tpo.dashboard') }}">
-
-      <div class="col-md-3"><input type="text" name="search" class="form-control" placeholder="Search name / roll"></div>
-      <div class="col-md-2"><select name="branch" class="form-select"><option value="">All Branch</option><option>CSE</option><option>IT</option><option>ECE</option><option>ME</option></select></div>
-      <div class="col-md-2"><select name="batch" class="form-select"><option value="">All Batch</option><option>2023</option><option>2024</option><option>2025</option></select></div>
-      <div class="col-md-2"><select name="status" class="form-select"><option value="">All Status</option><option>Eligible</option><option>On Hold</option><option>Placed</option></select></div>
-      <div class="col-md-2"><select name="recommendation" class="form-select"><option value="">All Recommendation</option><option>Personally Recommended to HR</option><option>Not Recommended</option></select></div>
-      <div class="col-md-1"><button class="btn btn-primary w-100">Filter</button></div>
-    </form>
-  </div></div>
-
-  <!-- Student Table -->
-  <div class="card mt-3">
-    <div class="card-header fw-semibold">Students List</div>
-    <div class="card-body p-0">
-      <table class="table table-hover mb-0">
-        <thead class="table-light">
-          <tr>
-            <th>Name</th><th>Roll No</th><th>Batch</th><th>CGPA</th><th>Skills</th><th>Status</th><th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for s in students %}
-          <tr>
-            <td>
-              <strong>{{ s.name }}</strong><br>
-              <small><strong>Branch:-</strong> {{ s.branch }} </small><br>
-              
-            </td>
-            <td>{{ s.roll_no }}</td>
-            
-            <td>{{ s.batch }}</td>
-            <td>{{ s.cgpa }}</td>
-            <td>{{ s.skills }}</td>
-            
-            <td>
-              {% if s.status == 'Eligible' %}
-                <span class="badge bg-success status-badge">Eligible</span>
-              {% elif s.status == 'On Hold' %}
-                <span class="badge bg-primary status-badge">On Hold</span>
-              {% else %}
-                <span class="badge bg-warning text-dark status-badge">{{ s.status }}</span>
-              {% endif %}
-            </td>
-            {#<td><span class="badge bg-info text-dark recommend-tag">{{ s.recommendation_tag }}</span></td>#}
-            <td>
-              
-            
-             <form method="post" action="{{ url_for('tpo.update_status') }}" class="d-inline">
-    <input type="hidden" name="id" value="{{ s._id }}">
-    <input type="hidden" name="status" value="Eligible">
-    <button class="btn btn-sm btn-success">Eligible</button>
-</form>
-
-<form method="post" action="{{ url_for('tpo.update_status') }}" class="d-inline">
-    <input type="hidden" name="id" value="{{ s._id }}">
-    <input type="hidden" name="status" value="On Hold">
-    <button class="btn btn-sm btn-warning">On Hold</button>
-</form>
-
-<a href="{{ url_for('tpo.view_student', id=s._id) }}" class="btn btn-sm btn-info">View Profile</a>
-
-              {#<form method="post" action="/update_recommendation" class="d-inline">
-                <input type="hidden" name="id" value="{{ s._id }}">
-                <input type="hidden" name="recommendation" value="Personally Recommended to HR">
-                <button class="btn btn-sm btn-info">Recommend</button>
-              </form>
-              <form method="post" action="/update_recommendation" class="d-inline">
-                <input type="hidden" name="id" value="{{ s._id }}">
-                <input type="hidden" name="recommendation" value="Not Recommended">
-                <button class="btn btn-sm btn-danger">Reject</button>
-              </form>#}
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+    <div class="mt-3">
+      <a href="{{ url_for('tpo.dashboard') }}" class="active">
+        <i class="fas fa-tachometer-alt"></i> Dashboard
+      </a>
+      <a href="#">
+        <i class="fas fa-users"></i> Students
+      </a>
+      <a href="#">
+        <i class="fas fa-building"></i> Companies
+      </a>
+      <a href="#">
+        <i class="fas fa-chart-line"></i> Placement Stats
+      </a>
+      <a href="#">
+        <i class="fas fa-file-alt"></i> Reports
+      </a>
+      <a href="{{ url_for('tpo.logout') }}" class="text-danger mt-4">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </a>
     </div>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<div class="main-content">
+  <div class="container-fluid">
+
+    <!-- Summary Cards -->
+    <div class="row g-3 mb-5">
+      <div class="col-6 col-md-3">
+        <div class="card summary-card">
+          <div class="card-body">
+            <i class="fas fa-users summary-icon"></i>
+            <div class="summary-number">{{ total }}</div>
+            <div class="opacity-75 small">Total Students</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card summary-card">
+          <div class="card-body">
+            <i class="fas fa-check-circle summary-icon"></i>
+            <div class="summary-number">{{ eligible }}</div>
+            <div class="opacity-75 small">Eligible</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card summary-card">
+          <div class="card-body">
+            <i class="fas fa-briefcase summary-icon"></i>
+            <div class="summary-number">{{ placed }}</div>
+            <div class="opacity-75 small">Placed</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card summary-card">
+          <div class="card-body">
+            <i class="fas fa-thumbs-up summary-icon"></i>
+            <div class="summary-number">{{ recommended }}</div>
+            <div class="opacity-75 small">Recommended</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card mb-4 border-0">
+      <div class="card-header">
+        <h5 class="mb-0">Filter Students</h5>
+      </div>
+      <div class="card-body">
+        <form method="get" class="row g-3" action="{{ url_for('tpo.dashboard') }}">
+          <div class="col-md-3 col-sm-6">
+            <input type="text" name="search" class="form-control" placeholder="Search name / roll no">
+          </div>
+          <div class="col-md-2 col-sm-6">
+            <select name="branch" class="form-select">
+              <option value="">All Branch</option>
+              <option value="CSE">CSE</option>
+              <option value="IT">IT</option>
+              <option value="ECE">ECE</option>
+              <option value="ME">ME</option>
+            </select>
+          </div>
+          <div class="col-md-2 col-sm-6">
+            <select name="batch" class="form-select">
+              <option value="">All Batch</option>
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+              <option value="2026">2026</option>
+            </select>
+          </div>
+          <div class="col-md-2 col-sm-6">
+            <select name="status" class="form-select">
+              <option value="">All Status</option>
+              <option value="Eligible">Eligible</option>
+              <option value="On Hold">On Hold</option>
+              <option value="Placed">Placed</option>
+            </select>
+          </div>
+          <div class="col-md-2 col-sm-6">
+            <select name="recommendation" class="form-select">
+              <option value="">All Recommendation</option>
+              <option value="Recommended">Personally Recommended</option>
+              <option value="Not Recommended">Not Recommended</option>
+            </select>
+          </div>
+          <div class="col-md-1 col-sm-12 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="fas fa-filter"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Student Table -->
+    <div class="card border-0">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Students List</h5>
+        <div>
+          <button class="btn btn-sm btn-outline-secondary me-2" disabled>
+            <i class="fas fa-download me-1"></i> Export
+          </button>
+          <button class="btn btn-sm btn-outline-secondary" disabled>
+            <i class="fas fa-print me-1"></i> Print
+          </button>
+        </div>
+      </div>
+
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead>
+              <tr>
+                <th><input type="checkbox" disabled></th>
+                <th>Name & Details</th>
+                <th>Roll No</th>
+                <th>Batch</th>
+                <th>CGPA</th>
+                <th>Skills</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for s in students %}
+              <tr>
+                <td><input type="checkbox" disabled></td>
+                <td>
+                  <strong>{{ s.name }}</strong><br>
+                  <small class="opacity-75">
+                    Branch: {{ s.branch }} • Email: {{ s.email }}
+                  </small>
+                </td>
+                <td>{{ s.roll_no }}</td>
+                <td>{{ s.batch }}</td>
+                <td>{{ s.cgpa }}</td>
+                <td>
+                  <div style="max-width: 240px;">
+                    {% for skill in s.skills.split(',') if skill.strip() %}
+                      <span class="badge bg-dark-subtle me-1 mb-1">{{ skill.strip() }}</span>
+                    {% endfor %}
+                  </div>
+                </td>
+                <td>
+                  {% if s.status == 'Eligible' %}
+                    <span class="badge-status bg-eligible">Eligible</span>
+                  {% elif s.status == 'On Hold' %}
+                    <span class="badge-status bg-onhold">On Hold</span>
+                  {% elif s.status == 'Placed' %}
+                    <span class="badge-status bg-placed">Placed</span>
+                  {% else %}
+                    <span class="badge-status bg-secondary">{{ s.status }}</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <div class="d-flex gap-2 flex-wrap">
+                    <form method="post" action="{{ url_for('tpo.update_status') }}" class="d-inline">
+                      <input type="hidden" name="id" value="{{ s._id }}">
+                      <input type="hidden" name="status" value="Eligible">
+                      <button type="submit" class="btn btn-sm btn-success">Eligible</button>
+                    </form>
+
+                    <form method="post" action="{{ url_for('tpo.update_status') }}" class="d-inline">
+                      <input type="hidden" name="id" value="{{ s._id }}">
+                      <input type="hidden" name="status" value="On Hold">
+                      <button type="submit" class="btn btn-sm btn-warning">On Hold</button>
+                    </form>
+
+                    <a href="{{ url_for('tpo.view_student', id=s._id) }}" class="btn btn-sm btn-info">
+                      <i class="fas fa-eye"></i> View
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="8" class="text-center py-5 opacity-75">
+                  <i class="fas fa-inbox fs-3 mb-3 d-block"></i>
+                  No students found matching current filters
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Mobile Sidebar Toggle Button -->
+<button class="sidebar-toggle btn position-fixed bottom-5 start-3 d-lg-none" 
+        type="button" 
+        data-bs-toggle="offcanvas" 
+        data-bs-target="#sidebarMenu" 
+        aria-controls="sidebarMenu"
+        aria-label="Toggle sidebar">
+  <i class="fas fa-bars"></i>
+</button>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
-```

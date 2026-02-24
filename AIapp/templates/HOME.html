@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SETU - Future of EdTech</title>
+      <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.52/build/spline-viewer.js"></script>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at center, #1a0033 0%, #050010 60%, #020005 100%);
+      color: #ffffff;
+      height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ---------- Navbar ---------- */
+    .navbar {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: #c084fc;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #ddd;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #c084fc;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: 20px;
+      border: 1px solid #a855f7;
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      transition: 0.3s ease;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      border: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+    }
+
+    /* ---------- Hero Section ---------- */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .tagline {
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .hero h1 {
+      font-size: 64px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #e9d5ff, #c084fc, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      max-width: 700px;
+      font-size: 16px;
+      color: #cbd5e1;
+      line-height: 1.6;
+      margin-bottom: 35px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ---------- Scroll Indicator ---------- */
+    .scroll {
+      position: absolute;
+      bottom: 30px;
+      text-align: center;
+      font-size: 12px;
+      color: #aaa;
+      letter-spacing: 2px;
+    }
+
+    .mouse {
+      width: 22px;
+      height: 35px;
+      border: 2px solid #888;
+      border-radius: 15px;
+      margin: 8px auto 0;
+      position: relative;
+    }
+
+    .wheel {
+      width: 4px;
+      height: 6px;
+      background: #c084fc;
+      border-radius: 2px;
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: scroll 1.5s infinite;
+    }
+
+    @keyframes scroll {
+      0% { opacity: 0; transform: translate(-50%, 0); }
+      50% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, 10px); }
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 40px;
+      }
+
+      .navbar {
+        padding: 20px;
+      }
+
+      .nav-links a:not(.btn) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">SETU</div>
+
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Services</a>
+      <a href="#">About Us</a>
+      <a href="{{ url_for('auth.login') }}" class="btn">Login / Register</a>
+      <a href="#" class="btn primary">Contact Us</a>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="tagline">WELCOME TO THE FUTURE OF EDTECH</div>
+
+    <h1>Welcome to SETU</h1>
+
+    <p>
+      A Unified Digital Ecosystem For Skill Validation, Employability,
+      Scoring & Inclusive Placement
+    </p>
+
+    <div class="hero-buttons">
+      <a href="#" class="btn primary">Explore Platform</a>
+      <a href="#" class="btn">Meet the Team</a>
+    </div>
+  </section>
+
+  <!-- Scroll Indicator -->
+  <div class="scroll">
+    SCROLL
+    <div class="mouse">
+      <div class="wheel"></div>
+    </div>
+  </div>
+  <!-- Project Overview Section -->
+  <section class="overview">
+    <p class="section-tag">OUR PLATFORM</p>
+    <h2>Project Overview</h2>
+    <p class="section-desc">
+      Discover how SETU transforms the education and employability landscape
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Unified Digital Dashboard</h3>
+        <p>Single interface for managing academics, skills, projects, and certifications — no more scattered data.</p>
+      </div>
+
+      <div class="card">
+        <h3>AI/ML-Driven Insights</h3>
+        <p>Predictive analytics to generate personalized career roadmaps based on student performance, data, and projects.</p>
+      </div>
+
+      <div class="card">
+        <h3>3-Level Mock Test System</h3>
+        <p>Comprehensive assessment covering Aptitude, Technical Skills, and Domain Knowledge readiness.</p>
+      </div>
+
+      <div class="card">
+        <h3>AI-Based Verification</h3>
+        <p>Automated credential verification system that validates certifications instantly, eliminating manual delays.</p>
+      </div>
+
+      <div class="card">
+        <h3>Gamified Experience</h3>
+        <p>Engaging learning environment using badges, leaderboards, and experience points to boost student motivation.</p>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .overview {
+      min-height: 100vh;
+      padding: 120px 40px;
+      text-align: center;
+      background: radial-gradient(circle at center, #120022 0%, #050010 70%, #020005 100%);
+    }
+
+    .section-tag {
+      color: #a855f7;
+      letter-spacing: 2px;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .overview h2 {
+      font-size: 48px;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #e9d5ff, #c084fc, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-desc {
+      color: #cbd5e1;
+      max-width: 600px;
+      margin: 0 auto 50px;
+      font-size: 15px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .card {
+      background: rgba(168, 85, 247, 0.05);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: left;
+      transition: 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.3);
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      color: #e9d5ff;
+    }
+
+    .card p {
+      color: #cbd5e1;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  </style>
+  <!-- About Us Section -->
+  <section class="about">
+    <p class="section-tag">THE PEOPLE BEHIND SETU</p>
+    <h2>About Us</h2>
+
+    <h4 class="subhead">Mentors & Guides</h4>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="avatar">AS</div>
+        <h3>Akrati Shrivastava</h3>
+        <p>T&P VITS, Mentor (VITS Bhopal)</p>
+        <span class="role">MENTOR</span>
+      </div>
+
+      <div class="team-card">
+        <div class="avatar">PS</div>
+        <h3>Prakher Singh Bhadoriya</h3>
+        <p>Mentor (VITS Bhopal)</p>
+        <span class="role">MENTOR</span>
+      </div>
+    </div>
+
+    <h4 class="subhead">Incubator / Core Team</h4>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="avatar">PV</div>
+        <h3>Pushkar Vishwakarma</h3>
+        <p> Research & UI/UX Designer</p>
+      </div>
+
+      <div class="team-card">
+        <div class="avatar">AM</div>
+        <h3>Aankita Malviya</h3>
+        <p>Full Stack Developer</p>
+      </div>
+
+      <div class="team-card">
+        <div class="avatar">VS</div>
+        <h3>Vijay Suryavanshi</h3>
+        <p>AI/ML Backend Expert</p>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .about {
+      padding: 120px 40px;
+      text-align: center;
+      background: radial-gradient(circle at center, #100020 0%, #050010 70%, #020005 100%);
+    }
+
+    .subhead {
+      margin: 40px 0 20px;
+      color: #c084fc;
+      font-weight: 500;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .team-card {
+      background: rgba(168, 85, 247, 0.05);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 20px;
+      padding: 30px;
+      transition: 0.3s ease;
+    }
+
+    .team-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.3);
+    }
+
+    .avatar {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      font-weight: 600;
+    }
+
+    .role {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 1px solid #a855f7;
+      color: #c084fc;
+    }
+  </style>
+  <!-- Extra Team Members -->
+  <section class="more-team">
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="avatar">RV</div>
+        <h3>Rohit Vishwakarma</h3>
+        <p>Data Storing & Cleaning</p>
+      </div>
+
+      <div class="team-card">
+        <div class="avatar">RS</div>
+        <h3>Rahul Sahu</h3>
+        <p>Designer & Market Analyst</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact">
+    <p class="section-tag">GET IN TOUCH</p>
+    <h2>Contact Us</h2>
+    <p class="section-desc">Have questions or want to collaborate? We'd love to hear from you.</p>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h3>Email</h3>
+        <p>is.that.pushkar01@gmail.com</p>
+      </div>
+
+      <div class="contact-card">
+        <h3>Phone</h3>
+        <p>9391585949<br>8269726454</p>
+      </div>
+
+      <div class="contact-card">
+        <h3>LinkedIn</h3>
+        <p>Connect with us</p>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .more-team {
+      padding: 40px;
+      text-align: center;
+    }
+
+    .contact {
+      padding: 120px 40px;
+      text-align: center;
+      background: radial-gradient(circle at center, #120022 0%, #050010 70%, #020005 100%);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      max-width: 900px;
+      margin: 40px auto 0;
+    }
+
+    .contact-card {
+      background: rgba(168, 85, 247, 0.05);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 20px;
+      padding: 30px;
+      transition: 0.3s ease;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.3);
+    }
+
+    .contact-card h3 {
+      margin-bottom: 10px;
+      color: #e9d5ff;
+    }
+
+    .contact-card p {
+      color: #cbd5e1;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  
+
+    /* ===== Extra Styling & Animations ===== */
+
+    .team-card, .contact-card, .card {
+      backdrop-filter: blur(10px);
+    }
+
+    .team-card:hover, .contact-card:hover, .card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 10px 40px rgba(168, 85, 247, 0.35);
+    }
+
+    h2 {
+      letter-spacing: 1px;
+      text-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+    }
+
+    .btn.primary {
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+    }
+
+    .btn.primary:hover {
+      box-shadow: 0 0 35px rgba(168, 85, 247, 0.8);
+      transform: translateY(-3px) scale(1.05);
+    }
+
+    /* Smooth fade-in animation */
+    .card, .team-card, .contact-card {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 1s ease forwards;
+    }
+
+    .card:nth-child(2), .team-card:nth-child(2), .contact-card:nth-child(2) { animation-delay: 0.2s; }
+    .card:nth-child(3), .team-card:nth-child(3), .contact-card:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+  </style>
+  <!-- Particles Background -->
+  <canvas id="particles"></canvas>
+
+  <script>
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particlesArray = [];
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.speedY = Math.random() * 0.5 - 0.25;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+
+      draw() {
+        ctx.fillStyle = 'rgba(168,85,247,0.7)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      particlesArray = [];
+      for (let i = 0; i < 120; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesArray.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initParticles();
+    });
+
+    initParticles();
+    animateParticles();
+  </script>
+
+  <style>
+    #particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: transparent;
+    }
+  </style>
+</body>
+</html>

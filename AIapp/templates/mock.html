@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mock Interview Practice • SETU</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <style>
+    :root {
+      --primary:     #00d4ff;
+      --primary-dark:#00aaff;
+      --glass:       rgba(255, 255, 255, 0.06);
+      --glass-border:rgba(0, 212, 255, 0.16);
+      --text:        #f0f4ff;
+      --text-muted:  rgba(240, 244, 255, 0.70);
+      --shadow:      0 10px 35px rgba(0, 0, 0, 0.60);
+    }
+
+    body {
+      background: linear-gradient(135deg, #1f1c2c 0%, #2a1b4d 50%, #0f2027 100%);
+      background-size: 300% 300%;
+      animation: gradientFlow 20s ease infinite;
+      color: var(--text);
+      min-height: 100vh;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      margin: 0;
+    }
+
+    @keyframes gradientFlow {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      min-height: 100vh;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid var(--glass-border);
+      position: fixed;
+      z-index: 1000;
+      box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+      transition: transform 0.35s ease;
+    }
+
+    .sidebar-header {
+      padding: 2rem 1.5rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.18);
+    }
+
+    .sidebar-header h5 {
+      color: #00ffd5;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin: 0;
+      text-transform: uppercase;
+      font-size: 1.35rem;
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      padding: 1.1rem 1.6rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar a i {
+      width: 26px;
+      margin-right: 14px;
+      font-size: 1.2rem;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: rgba(0, 212, 255, 0.14);
+      color: #00ffd5;
+      transform: translateX(8px);
+    }
+
+    .sidebar a.active {
+      border-left: 4px solid #00ffd5;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      padding: 2.5rem 2rem;
+    }
+
+    .card {
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1.4rem;
+      box-shadow: var(--shadow);
+      color: var(--text);
+    }
+
+    .card-header {
+      background: rgba(0, 212, 255, 0.09);
+      border-bottom: 1px solid rgba(0, 212, 255, 0.18);
+      color: #00ffd5;
+      font-weight: 600;
+    }
+
+    .question-box {
+      min-height: 140px;
+      font-size: 1.25rem;
+      line-height: 1.6;
+      padding: 1.8rem;
+      background: rgba(30, 41, 59, 0.6);
+      border-radius: 1rem;
+      border-left: 5px solid #00ffd5;
+      margin: 1.5rem 0;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #00d4ff, #00aaff);
+      border: none;
+      color: #0f172a;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #00aaff, #00d4ff);
+      box-shadow: 0 8px 25px rgba(0, 212, 255, 0.35);
+    }
+
+    @media (max-width: 992px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.show { transform: translateX(0); }
+      .main-content { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title">Student Portal</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="sidebar-header">
+      <h5>Student Portal</h5>
+    </div>
+    <a href="/student/dashboard"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="#"><i class="fas fa-brain"></i> Skill Gap</a>
+    <a href="#" class="active"><i class="fas fa-microphone-lines"></i> Mock Interview</a>
+    <a href="#"><i class="fas fa-clipboard-check"></i> Assessment</a>
+    <a href="#"><i class="fas fa-briefcase"></i> Jobs</a>
+    <a href="/logout" class="text-danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-lg-9 col-xl-8">
+
+        <div class="text-center mb-5">
+          <h1 style="color: #00ffd5; font-weight: 700;">Mock Interview Practice</h1>
+          <p class="lead opacity-85 mb-4">कॉलेज प्लेसमेंट के लिए रियल-टाइम प्रैक्टिस करें</p>
+        </div>
+
+        <!-- Setup Card -->
+        <div class="card mb-5">
+          <div class="card-header">
+            <h4 class="mb-0">Interview Setup</h4>
+          </div>
+          <div class="card-body p-4">
+
+            <div class="row g-4">
+
+              <div class="col-md-6">
+                <label class="form-label">Interview Type</label>
+                <select class="form-select" id="interviewType">
+                  <option value="technical">Technical Round (Coding + CS Fundamentals)</option>
+                  <option value="hr">HR Round (Behavioral + Personality)</option>
+                  <option value="mixed">Mixed (Technical + HR)</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Duration</label>
+                <select class="form-select" id="duration">
+                  <option value="10">10 मिनट (Quick Practice)</option>
+                  <option value="20" selected>20 मिनट (Standard)</option>
+                  <option value="30">30 मिनट (Full Mock)</option>
+                </select>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Your Branch / Role Target</label>
+                <input type="text" class="form-control" id="targetRole" placeholder="e.g. Software Developer, SDE-1, Data Analyst" value="Software Engineer Fresher">
+              </div>
+
+            </div>
+
+            <div class="text-center mt-4">
+              <button id="startInterviewBtn" class="btn btn-primary btn-lg px-5">
+                <i class="fas fa-microphone me-2"></i> Start Mock Interview
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Interview Area (hidden initially) -->
+        <div id="interviewArea" class="d-none">
+
+          <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Mock Interview in Progress</h5>
+              <div>
+                <span id="timer" class="badge bg-dark fs-6">00:00</span>
+              </div>
+            </div>
+            <div class="card-body p-4">
+
+              <div class="question-box" id="currentQuestion">
+                सवाल यहाँ दिखाई देगा...
+              </div>
+
+              <div class="d-flex gap-3 justify-content-center mt-4 flex-wrap">
+                <button id="nextQuestionBtn" class="btn btn-primary px-4">
+                  Next Question <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+                <button id="endInterviewBtn" class="btn btn-outline-danger px-4">
+                  <i class="fas fa-stop me-1"></i> End Interview
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Tips Box -->
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Quick Interview Tips</h5>
+            </div>
+            <div class="card-body">
+              <ul class="mb-0 opacity-85" style="list-style-type: none; padding-left: 0;">
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>STAR Method इस्तेमाल करें (Situation, Task, Action, Result)</li>
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>साफ और कॉन्फिडेंट बोलें</li>
+                <li><i class="fas fa-check-circle text-success me-2"></i>Technical सवाल में सोचते हुए बोलें (think aloud)</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Mobile Sidebar Toggle -->
+<button class="btn btn-primary d-lg-none position-fixed bottom-0 start-0 m-4 rounded-circle shadow-lg p-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" style="z-index: 1050;">
+  <i class="fas fa-bars fs-4"></i>
+</button>
+
+<script>
+const interviewArea = document.getElementById('interviewArea');
+const startBtn = document.getElementById('startInterviewBtn');
+const nextBtn = document.getElementById('nextQuestionBtn');
+const endBtn = document.getElementById('endInterviewBtn');
+const questionBox = document.getElementById('currentQuestion');
+const timerEl = document.getElementById('timer');
+
+let timerInterval;
+let seconds = 0;
+
+// सैंपल सवाल बैंक (आप इसे और बढ़ा सकते हैं या API से ला सकते हैं)
+const questions = {
+  technical: [
+    "Difference between let, const and var in JavaScript?",
+    "Explain OOP concepts with real-life example.",
+    "What is a deadlock in OS? How to prevent it?",
+    "Reverse a string without using built-in functions.",
+    "What is REST API? Explain HTTP methods.",
+    "Explain SQL JOIN types with example.",
+    "What is virtual DOM in React?",
+    "Difference between stack and queue.",
+    "What is recursion? Write factorial example.",
+    "Explain binary search algorithm."
+  ],
+  hr: [
+    "Tell me about yourself.",
+    "Why should we hire you?",
+    "What are your strengths and weaknesses?",
+    "Where do you see yourself in 5 years?",
+    "Why do you want to join our company?",
+    "Describe a challenging situation and how you handled it.",
+    "How do you handle pressure or tight deadlines?",
+    "What motivates you to work hard?",
+    "Do you prefer team work or working alone? Why?",
+    "Any questions for us?"
+  ],
+  mixed: [
+    "Tell me about a project you worked on.",
+    "Explain your final year project in 2 minutes.",
+    "How do you keep yourself updated with new technologies?",
+    "What is your favorite programming language and why?",
+    "Describe a time when you failed and what you learned.",
+    "How do you prioritize tasks in a project?",
+    "What is your approach to debugging code?",
+    "How do you handle conflicts in a team?",
+    "Why did you choose this branch?",
+    "Any questions for the interviewer?"
+  ]
+};
+
+startBtn.addEventListener('click', () => {
+  interviewArea.classList.remove('d-none');
+  startBtn.closest('.card').classList.add('d-none');
+
+  const type = document.getElementById('interviewType').value || 'mixed';
+  const durationMin = parseInt(document.getElementById('duration').value) || 20;
+
+  // टाइमर शुरू
+  seconds = durationMin * 60;
+  updateTimer();
+  timerInterval = setInterval(updateTimer, 1000);
+
+  // पहला सवाल दिखाओ
+  showNextQuestion(type);
+});
+
+nextBtn.addEventListener('click', () => {
+  const type = document.getElementById('interviewType').value || 'mixed';
+  showNextQuestion(type);
+});
+
+endBtn.addEventListener('click', () => {
+  if (confirm("क्या आप इंटरव्यू खत्म करना चाहते हैं?")) {
+    clearInterval(timerInterval);
+    questionBox.innerHTML = "<div class='text-center py-5'><h4>Mock Interview Ended</h4><p>Practice more to boost confidence!</p></div>";
+    nextBtn.disabled = true;
+  }
+});
+
+function showNextQuestion(type) {
+  const qList = questions[type] || questions.mixed;
+  const randomIndex = Math.floor(Math.random() * qList.length);
+  questionBox.textContent = qList[randomIndex];
+}
+
+function updateTimer() {
+  if (seconds <= 0) {
+    clearInterval(timerInterval);
+    timerEl.textContent = "Time's Up!";
+    return;
+  }
+  seconds--;
+  const min = Math.floor(seconds / 60);
+  const sec = seconds % 60;
+  timerEl.textContent = `${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+}
+</script>
+
+</body>
+</html>

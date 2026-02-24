@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Reports • SETU TPO</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #00e0ff;
+      --accent: #00ffdd;
+      --glass: rgba(20, 25, 45, 0.32);
+      --glass-border: rgba(0, 212, 255, 0.38);
+      --radius: 24px;
+      --shadow: 0 16px 40px rgba(0, 212, 255, 0.25);
+      --transition: all 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    body {
+      background: linear-gradient(135deg, #0b1320, #1a1f3a, #0c1a27, #172554);
+      background-size: 300% 300%;
+      animation: gradient 35s ease infinite;
+      color: #e0faff;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    @keyframes gradient {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .main {
+      padding: 50px 35px;
+      max-width: 1480px;
+      margin: 0 auto;
+    }
+
+    h2, h3 {
+      background: linear-gradient(90deg, #a5f3fc, #00e0ff, #7dd3fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+    }
+
+    .card-glass {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow), inset 0 0 30px rgba(0,212,255,0.12);
+      transition: var(--transition);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-glass:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(0,212,255,0.32);
+    }
+
+    .summary-card {
+      text-align: center;
+      padding: 28px 20px;
+    }
+
+    .summary-icon {
+      font-size: 3rem;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .summary-number {
+      font-size: 3.2rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .progress {
+      height: 12px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    .progress-bar {
+      background: linear-gradient(90deg, #00ffdd, #00c9ff, #60a5fa);
+      transition: width 1.2s ease-out;
+      box-shadow: 0 0 12px rgba(0,255,221,0.6);
+    }
+
+    .table {
+      color: #e0faff;
+      min-width: 950px;
+    }
+
+    .table thead th {
+      background: linear-gradient(180deg, rgba(0,212,255,0.32), rgba(0,212,255,0.20));
+      backdrop-filter: blur(14px);
+      color: #a5f3fc;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 0.86rem;
+      letter-spacing: 1.1px;
+      padding: 20px 22px;
+      border-bottom: 2px solid rgba(0,212,255,0.5);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    .table tbody tr {
+      background: rgba(10,15,26,0.94);
+      transition: var(--transition);
+    }
+
+    .table tbody tr:nth-child(odd) {
+      background: rgba(13,19,33,0.94);
+    }
+
+    .table tbody tr:hover {
+      background: rgba(0,212,255,0.20);
+      transform: translateY(-4px);
+      box-shadow: 0 14px 36px rgba(0,212,255,0.30);
+    }
+
+    .table td {
+      padding: 20px 22px;
+      vertical-align: middle;
+      font-size: 1rem;
+    }
+
+    .badge-report {
+      padding: 9px 18px;
+      border-radius: 50px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      min-width: 110px;
+      text-align: center;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .bg-high   { background: linear-gradient(135deg, #10d981, #34d399); color: #021f12; }
+    .bg-medium { background: linear-gradient(135deg, #fbbf24, #fcd34d); color: #422c00; }
+    .bg-low    { background: linear-gradient(135deg, #ef4444, #f87171); color: white; }
+
+    .filter-select {
+      background: rgba(15,23,42,0.7);
+      border: 1px solid rgba(0,212,255,0.4);
+      color: white;
+    }
+
+    .export-btn {
+      background: linear-gradient(135deg, #00ffdd, #00c9ff);
+      border: none;
+      color: #0f172a;
+      font-weight: 800;
+      padding: 12px 24px;
+      transition: var(--transition);
+    }
+
+    .export-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,255,221,0.5);
+    }
+
+    .insight-card {
+      background: linear-gradient(135deg, rgba(0,212,255,0.12), rgba(30,35,55,0.28));
+      border: 1px solid rgba(0,212,255,0.4);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    @media (max-width: 992px) {
+      .main { padding: 35px 20px; }
+    }
+
+    @media (max-width: 576px) {
+      .summary-number { font-size: 2.4rem; }
+      .table { min-width: 850px; }
+      .table td, .table th { padding: 16px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+      <h2>Placement Analytics & Reports</h2>
+      <div class="d-flex gap-3 flex-wrap">
+        <button class="btn export-btn">
+          <i class="fas fa-file-csv me-2"></i> Export CSV
+        </button>
+        <button class="btn btn-outline-light">
+          <i class="fas fa-file-pdf me-2"></i> Export PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-5 g-3">
+      <div class="col-md-4 col-sm-6">
+        <select class="form-select filter-select shadow-none">
+          <option selected>Academic Year: 2025-2026</option>
+          <option>2024-2025</option>
+          <option>2023-2024</option>
+        </select>
+      </div>
+      <div class="col-md-4 col-sm-6">
+        <select class="form-select filter-select shadow-none">
+          <option selected>All Branches</option>
+          <option>CSE</option>
+          <option>IT</option>
+          <option>ECE</option>
+          <option>Mechanical</option>
+          <option>Civil</option>
+        </select>
+      </div>
+      <div class="col-md-4 col-sm-12">
+        <select class="form-select filter-select shadow-none">
+          <option selected>Show All Companies</option>
+          <option>Product-based Only</option>
+          <option>Mass Recruiters Only</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Overall Summary -->
+    <div class="row g-4 mb-5">
+      <div class="col-lg-3 col-md-6">
+        <div class="summary-card">
+          <i class="fas fa-users-gear summary-icon"></i>
+          <div class="summary-number counter" data-target="312">0</div>
+          <small>Eligible Students</small>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="summary-card">
+          <i class="fas fa-trophy summary-icon"></i>
+          <div class="summary-number counter" data-target="238">0</div>
+          <small>Placed Students</small>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="summary-card">
+          <i class="fas fa-chart-pie summary-icon"></i>
+          <div class="summary-number">76.28%</div>
+          <small>Placement Rate</small>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="summary-card">
+          <i class="fas fa-rupee-sign summary-icon"></i>
+          <div class="summary-number">₹12.8 LPA</div>
+          <small>Average CTC</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insights Card -->
+    <div class="insight-card mb-5">
+      <h4 class="mb-3">Quick Insights</h4>
+      <ul class="list-unstyled mb-0">
+        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>CSE/IT branches crossed 80%+ placement</li>
+        <li class="mb-2"><i class="fas fa-arrow-up text-success me-2"></i>Average package up 14% from last year</li>
+        <li class="mb-2"><i class="fas fa-star text-warning me-2"></i>Highest offer: ₹48 LPA (Google)</li>
+        <li><i class="fas fa-exclamation-triangle text-warning me-2"></i>Civil branch needs more training focus</li>
+      </ul>
+    </div>
+
+    <!-- Branch-wise Stats (with progress bars) -->
+    <h3 class="mb-4">Branch-wise Performance</h3>
+    <div class="card-glass mb-5">
+      <div class="table-responsive p-3">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Branch</th>
+              <th>Total</th>
+              <th>Eligible</th>
+              <th>Placed</th>
+              <th>Placement %</th>
+              <th>Progress</th>
+              <th>Avg CTC (LPA)</th>
+              <th>Highest (LPA)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>CSE</td>
+              <td>132</td>
+              <td>118</td>
+              <td>102</td>
+              <td>86.4%</td>
+              <td><div class="progress"><div class="progress-bar" style="width: 86.4%"></div></div></td>
+              <td>16.2</td>
+              <td>48.0</td>
+            </tr>
+            <tr>
+              <td>IT</td>
+              <td>94</td>
+              <td>82</td>
+              <td>68</td>
+              <td>82.9%</td>
+              <td><div class="progress"><div class="progress-bar" style="width: 82.9%"></div></div></td>
+              <td>14.7</td>
+              <td>41.5</td>
+            </tr>
+            <tr>
+              <td>ECE</td>
+              <td>78</td>
+              <td>64</td>
+              <td>35</td>
+              <td>54.7%</td>
+              <td><div class="progress"><div class="progress-bar" style="width: 54.7%"></div></div></td>
+              <td>9.4</td>
+              <td>26.0</td>
+            </tr>
+            <tr>
+              <td>Mechanical</td>
+              <td>52</td>
+              <td>38</td>
+              <td>16</td>
+              <td>42.1%</td>
+              <td><div class="progress"><div class="progress-bar" style="width: 42.1%"></div></div></td>
+              <td>7.1</td>
+              <td>18.0</td>
+            </tr>
+            <tr>
+              <td>Civil</td>
+              <td>38</td>
+              <td>28</td>
+              <td>5</td>
+              <td>17.9%</td>
+              <td><div class="progress"><div class="progress-bar" style="width: 17.9%"></div></div></td>
+              <td>5.2</td>
+              <td>11.5</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Top Companies -->
+    <h3 class="mb-4">Top Recruiters Snapshot</h3>
+    <div class="card-glass mb-5">
+      <div class="table-responsive p-3">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Company</th>
+              <th>Students Placed</th>
+              <th>Avg CTC (LPA)</th>
+              <th>Highest CTC (LPA)</th>
+              <th>Drives</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Google</td>
+              <td>10</td>
+              <td>29.8</td>
+              <td>48.0</td>
+              <td>2</td>
+              <td><span class="badge-report bg-high">Product</span></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Microsoft</td>
+              <td>14</td>
+              <td>25.6</td>
+              <td>42.0</td>
+              <td>3</td>
+              <td><span class="badge-report bg-high">Product</span></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Amazon</td>
+              <td>19</td>
+              <td>21.3</td>
+              <td>36.5</td>
+              <td>4</td>
+              <td><span class="badge-report bg-high">Product</span></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>TCS</td>
+              <td>78</td>
+              <td>7.6</td>
+              <td>12.0</td>
+              <td>7</td>
+              <td><span class="badge-report bg-medium">Mass</span></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Infosys</td>
+              <td>51</td>
+              <td>7.1</td>
+              <td>10.5</td>
+              <td>6</td>
+              <td><span class="badge-report bg-medium">Mass</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Chart Placeholder -->
+    <h3 class="mb-4">Placement Trend (Last 12 Months)</h3>
+    <div class="card-glass p-4 text-center">
+      <div style="height: 380px; background: rgba(0,0,0,0.2); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+        <div>
+          <i class="fas fa-chart-line fa-4x mb-3 opacity-50"></i>
+          <p class="lead mb-2">Interactive Chart Area</p>
+          <small>Integrate Chart.js / ApexCharts here for line/bar/donut visualization</small>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Counter animation with comma formatting
+    document.querySelectorAll('.counter').forEach(counter => {
+      const target = +counter.getAttribute('data-target') || 0;
+      let count = 0;
+      const inc = target / 80;
+      const update = () => {
+        count += inc;
+        counter.innerText = Math.ceil(count).toLocaleString('en-IN');
+        if (count < target) setTimeout(update, 16);
+        else counter.innerText = target.toLocaleString('en-IN');
+      };
+      if (target > 0) update();
+    });
+  </script>
+
+</body>
+</html>

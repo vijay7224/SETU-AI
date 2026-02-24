@@ -8,10 +8,12 @@ auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/")
 def index():
-    return render_template("Login.html")
+    return render_template("HOME.html")
 
-@auth_bp.route("/login", methods=["POST"])
+@auth_bp.route("/login", methods=["POST","GET"])
 def login():
+    if request.method == "GET":
+        return render_template("login.html")
     email = request.form.get("email")
     password = request.form.get("password")
     role = request.form.get("role")
@@ -30,13 +32,14 @@ def login():
         flash("TPO approval pending!", "warning")
         return redirect(url_for("auth.index"))
     session["user_email"] = user["email"]
+    session["user_id"] = str(user["_id"])
 
     if role == "student":
         return redirect(url_for("student.dashboard"))
     elif role == "tpo":
-        return redirect(url_for("tpo.dashboard"))
+        return redirect(url_for("tpo.welcome"))
     elif role == "hr":
-        return redirect(url_for("hr.dashboard"))
+        return redirect(url_for("hr.welcome"))
 
 @auth_bp.route("/register", methods=["POST"])
 def register():

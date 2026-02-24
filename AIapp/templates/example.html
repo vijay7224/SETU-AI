@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TPO Dashboard • SETU</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #00e0ff;
+      --accent: #00ffdd;
+      --glass: rgba(30, 35, 55, 0.22);
+      --glass-border: rgba(0, 212, 255, 0.28);
+      --radius: 20px;
+      --radius-sm: 12px;
+      --shadow: 0 12px 35px rgba(0, 212, 255, 0.18);
+      --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      --sidebar-width: 280px;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #1e1b4b, #0c1a27, #1e293b);
+      background-size: 400% 400%;
+      animation: gradient 30s ease infinite;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    @keyframes gradient {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-width);
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: linear-gradient(180deg, rgba(15,23,42,0.98) 0%, rgba(15,23,42,0.92) 100%);
+      backdrop-filter: blur(16px) saturate(180%);
+      border-right: 1px solid var(--glass-border);
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+      padding-top: 30px;
+      overflow-y: auto;
+      z-index: 1000;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sidebar h4 {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      margin-bottom: 2rem;
+      background: linear-gradient(90deg, #00ffdd, #00c9ff, #a5f3fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      padding: 14px 24px;
+      margin: 4px 12px;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .sidebar a i { width: 28px; }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: rgba(0, 212, 255, 0.18);
+      color: white;
+      transform: translateX(6px);
+    }
+
+    /* ── Main ── */
+    .main {
+      margin-left: var(--sidebar-width);
+      padding: 30px 25px;
+      min-height: 100vh;
+      width: calc(100% - var(--sidebar-width));
+      box-sizing: border-box;
+    }
+
+    /* ── Summary Cards ── */
+    .summary-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      text-align: center;
+      padding: 24px 18px;
+      backdrop-filter: blur(12px);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .summary-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow);
+    }
+
+    .summary-icon {
+      font-size: 2.4rem;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .summary-number {
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, #a5f3fc, #00e0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ── Improved Table Section ── */
+    .card-glass {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 0 20px rgba(0, 212, 255, 0.08);
+      position: relative;
+    }
+
+    .card-glass::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, 
+        rgba(0, 212, 255, 0.06) 0%, 
+        transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 224, 255, 0.4) transparent;
+    }
+
+    .table-responsive::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .table-responsive::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb {
+      background: rgba(0, 224, 255, 0.5);
+      border-radius: 10px;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    .table {
+      color: #e0f2fe;
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+      min-width: 900px;
+      table-layout: auto;
+      position: relative;
+    }
+
+    .table thead {
+      background: rgba(0, 212, 255, 0.22);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .table thead th {
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 0.9px;
+      color: #a5f3fc;
+      padding: 16px 18px;
+      border-bottom: 2px solid rgba(0, 212, 255, 0.4);
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: rgba(15, 23, 42, 0.92);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 12px rgba(0, 212, 255, 0.12);
+    }
+
+    .table tbody tr {
+      background: #0f172a;                      /* ← darker solid background */
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .table tbody tr:nth-child(odd) {
+      background: #111827;                      /* ← subtle zebra for readability */
+    }
+
+    .table tbody tr:hover {
+      background: rgba(0, 212, 255, 0.22) !important;   /* strong cyan hover */
+      transform: translateY(-2px) scale(1.008);
+      box-shadow: 0 12px 30px rgba(0, 212, 255, 0.28);
+      z-index: 1;
+    }
+
+    .table tbody tr:hover::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(0, 255, 221, 0.4);
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow: 
+        0 0 12px rgba(0, 255, 221, 0.35),
+        0 0 25px rgba(0, 255, 221, 0.15);
+      opacity: 0;
+      animation: neonPulse 1.5s infinite alternate;
+    }
+
+    @keyframes neonPulse {
+      0%   { opacity: 0.3; }
+      100% { opacity: 0.8; }
+    }
+
+    .table td {
+      padding: 16px 18px;
+      vertical-align: middle;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.96rem;
+      transition: all 0.25s ease;
+    }
+
+    .table td:first-child {
+      font-weight: 600;
+      color: #e0faff;
+    }
+
+    .table td:first-child small {
+      font-size: 0.84rem;
+      opacity: 0.75;
+      display: block;
+      margin-top: 5px;
+      color: #a5f3fc;
+    }
+
+    .badge-status {
+      padding: 7px 16px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.14);
+      min-width: 92px;
+      text-align: center;
+      display: inline-block;
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+    }
+
+    .bg-eligible { 
+      background: linear-gradient(135deg, #10d981, #34d399); 
+      color: #021f12; 
+      box-shadow: 0 3px 12px rgba(16,217,129,0.5); 
+    }
+
+    .bg-onhold   { 
+      background: linear-gradient(135deg, #fbbf24, #facc15); 
+      color: #422c00; 
+      box-shadow: 0 3px 12px rgba(251,191,36,0.5); 
+    }
+
+    .bg-placed   { 
+      background: linear-gradient(135deg, #3b82f6, #60a5fa); 
+      color: white; 
+      box-shadow: 0 3px 14px rgba(59,130,246,0.6); 
+    }
+
+    .badge-status:hover {
+      transform: scale(1.08);
+    }
+
+    .table td:last-child {
+      min-width: 210px;
+    }
+
+    .table .btn-sm {
+      padding: 0.45rem 1rem;
+      font-size: 0.87rem;
+      transition: all 0.3s ease;
+    }
+
+    .table .btn-outline-info:hover,
+    .table .btn-outline-light:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0, 212, 255, 0.3);
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      :root { --sidebar-width: 0; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.show { transform: translateX(0); width: 280px; }
+      .main {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px 18px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .summary-number { font-size: 2rem; }
+      .summary-icon   { font-size: 2rem; }
+      .table { min-width: 750px; }
+      .table td, .table th { padding: 12px 14px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="sidebar">
+    <h4>SETU TPO</h4>
+    <a href="#" class="active"><i class="fas fa-chart-line"></i> Dashboard</a>
+    <a href="{{ url_for('tpo.tpo_students') }}"><i class="fas fa-users"></i> Students</a>
+    <a href="{{ url_for('tpo.company') }}"><i class="fas fa-building"></i> Companies</a>
+    <a href="{{ url_for('tpo.report') }}"><i class="fas fa-file-alt"></i> Reports</a>
+    <a href="{{ url_for('tpo.logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </div>
+
+  <div class="main container-fluid">
+
+    <div class="row g-4 mb-5">
+      <div class="col-md-3 col-6">
+        <div class="summary-card">
+          <i class="fas fa-users summary-icon"></i>
+          <div class="summary-number counter" data-target="{{ total|default(0) }}">0</div>
+          <small>Total Students</small>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="summary-card">
+          <i class="fas fa-check-circle summary-icon"></i>
+          <div class="summary-number counter" data-target="{{ eligible|default(0) }}">0</div>
+          <small>Eligible</small>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="summary-card">
+          <i class="fas fa-briefcase summary-icon"></i>
+          <div class="summary-number counter" data-target="{{ placed|default(0) }}">0</div>
+          <small>Placed</small>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="summary-card">
+          <i class="fas fa-hourglass-half summary-icon"></i>
+          <div class="summary-number counter" data-target="{{ onhold|default(0) }}">0</div>
+          <small>On Hold</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-glass p-3">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Roll</th>
+              <th>Branch</th>
+              <th>CGPA</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if students %}
+              {% for s in students %}
+              <tr>
+                <td>
+                  <strong>{{ s.name }}</strong>
+                  <small class="text-muted">{{ s.email }}</small>
+                </td>
+                <td>{{ s.roll_no }}</td>
+                <td>{{ s.branch }}</td>
+                <td>{{ s.cgpa }}</td>
+                <td>
+                  {% if s.status == 'Eligible' %}
+                    <span class="badge-status bg-eligible">Eligible</span>
+                  {% elif s.status == 'Placed' %}
+                    <span class="badge-status bg-placed">Placed</span>
+                  {% else %}
+                    <span class="badge-status bg-onhold">On Hold</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <div class="d-flex gap-2 flex-wrap">
+                    <a href="{{ url_for('tpo.view_student', id=s._id) }}" 
+                       class="btn btn-sm btn-outline-info">
+                       <i class="fas fa-eye"></i> View Profile
+                    </a>
+
+                    <div class="dropdown">
+                      <button class="btn btn-sm btn-outline-light dropdown-toggle" 
+                              type="button" data-bs-toggle="dropdown">
+                        Update
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-dark">
+                        <li>
+                          <form method="POST" action="{{ url_for('tpo.update_status') }}">
+                            <input type="hidden" name="id" value="{{ s._id }}">
+                            <input type="hidden" name="status" value="Eligible">
+                            <button type="submit" class="dropdown-item text-success">Eligible</button>
+                          </form>
+                        </li>
+                        <li>
+                          <form method="POST" action="{{ url_for('tpo.update_status') }}">
+                            <input type="hidden" name="id" value="{{ s._id }}">
+                            <input type="hidden" name="status" value="On Hold">
+                            <button type="submit" class="dropdown-item text-warning">On Hold</button>
+                          </form>
+                        </li>
+                        <li>
+                          <form method="POST" action="{{ url_for('tpo.update_status') }}">
+                            <input type="hidden" name="id" value="{{ s._id }}">
+                            <input type="hidden" name="status" value="Placed">
+                            <button type="submit" class="dropdown-item text-info">Placed</button>
+                          </form>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="6" class="text-center py-5 text-muted">
+                  No students found
+                </td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <script>
+    // Counter animation
+    document.querySelectorAll('.counter').forEach(counter => {
+      const target = +counter.getAttribute('data-target') || 0;
+      let count = 0;
+      const inc = target / 70;
+      const update = () => {
+        count += inc;
+        counter.innerText = Math.ceil(count);
+        if (count < target) setTimeout(update, 18);
+        else counter.innerText = target;
+      };
+      if (target > 0) update();
+    });
+  </script>
+
+</body>
+</html>

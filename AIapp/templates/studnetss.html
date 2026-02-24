@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Students • SETU TPO</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #00e0ff;
+      --accent: #00ffdd;
+      --glass: rgba(30, 35, 55, 0.22);
+      --glass-border: rgba(0, 212, 255, 0.28);
+      --radius: 20px;
+      --radius-sm: 12px;
+      --shadow: 0 12px 35px rgba(0, 212, 255, 0.18);
+      --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      --sidebar-width: 280px;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #1e1b4b, #0c1a27, #1e293b);
+      background-size: 400% 400%;
+      animation: gradient 30s ease infinite;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Sidebar - same as dashboard */
+    .sidebar {
+      width: var(--sidebar-width);
+      height: 100vh;
+      position: fixed;
+      top: 0; left: 0;
+      background: linear-gradient(180deg, rgba(15,23,42,0.98) 0%, rgba(15,23,42,0.92) 100%);
+      backdrop-filter: blur(16px);
+      border-right: 1px solid var(--glass-border);
+      box-shadow: 0 0 40px rgba(0,0,0,0.4);
+      padding-top: 30px;
+      overflow-y: auto;
+      z-index: 1000;
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .sidebar h4 {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      margin-bottom: 2rem;
+      background: linear-gradient(90deg, #00ffdd, #00c9ff, #a5f3fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      padding: 14px 24px;
+      margin: 4px 12px;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .sidebar a i { width: 28px; }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: rgba(0, 212, 255, 0.18);
+      color: white;
+      transform: translateX(6px);
+    }
+
+    /* Main content */
+    .main {
+      margin-left: var(--sidebar-width);
+      padding: 30px 25px;
+      min-height: 100vh;
+      width: calc(100% - var(--sidebar-width));
+    }
+
+    .card-glass {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 0 20px rgba(0,212,255,0.08);
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .table {
+      color: #e0f2fe;
+      width: 100%;
+      min-width: 1100px;
+    }
+
+    .table thead th {
+      background: rgba(0, 212, 255, 0.22);
+      color: #a5f3fc;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.82rem;
+      letter-spacing: 0.8px;
+      padding: 16px 18px;
+      border-bottom: 2px solid rgba(0,212,255,0.4);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .table tbody tr {
+      background: #0a0f1a;
+      transition: all 0.25s ease;
+    }
+
+    .table tbody tr:nth-child(odd) {
+      background: #0d1321;
+    }
+
+    .table tbody tr:hover {
+      background: rgba(0, 212, 255, 0.24);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 25px rgba(0,212,255,0.2);
+    }
+
+    .table td {
+      padding: 16px 18px;
+      vertical-align: middle;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .badge-status {
+      padding: 7px 16px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      min-width: 92px;
+      text-align: center;
+      display: inline-block;
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.3);
+    }
+
+    .bg-eligible { background: linear-gradient(135deg, #10d981, #34d399); color: #021f12; }
+    .bg-onhold   { background: linear-gradient(135deg, #fbbf24, #facc15); color: #422c00; }
+    .bg-placed   { background: linear-gradient(135deg, #3b82f6, #60a5fa); color: white; }
+
+    .search-box {
+      max-width: 400px;
+    }
+
+    @media (max-width: 992px) {
+      :root { --sidebar-width: 0; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.show { transform: translateX(0); }
+      .main { margin-left: 0; width: 100%; }
+    }
+
+    @media (max-width: 576px) {
+      .table { min-width: 900px; }
+      .table td, .table th { padding: 12px 14px; font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h4>SETU TPO</h4>
+    <a href="#"><i class="fas fa-chart-line"></i> Dashboard</a>
+    <a href="#" class="active"><i class="fas fa-users"></i> Students</a>
+    <a href="#"><i class="fas fa-building"></i> Companies</a>
+    <a href="#"><i class="fas fa-file-alt"></i> Reports</a>
+    <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+      <h2 class="mb-0">Students List</h2>
+      
+      <div class="input-group search-box">
+        <span class="input-group-text bg-transparent border-0 text-white">
+          <i class="fas fa-search"></i>
+        </span>
+        <input type="text" class="form-control bg-dark border-0 text-white" 
+               id="searchInput" placeholder="Search by name, roll, branch, email...">
+      </div>
+    </div>
+
+    <div class="card-glass">
+      <div class="table-responsive p-3">
+        <table class="table table-hover align-middle mb-0" id="studentsTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Roll No</th>
+              <th>Branch</th>
+              <th>Year</th>
+              <th>CGPA</th>
+              <th>Email</th>
+              <th>Mobile</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if students %}
+              {% for s in students %}
+              <tr>
+                <td>
+                  <strong>{{ s.name }}</strong>
+                  <small class="d-block text-muted mt-1">{{ s.email }}</small>
+                </td>
+                <td>{{ s.roll_no }}</td>
+                <td>{{ s.branch }}</td>
+                <td>{{ s.year|default('2025') }}</td>
+                <td>{{ s.cgpa }}</td>
+                <td>{{ s.email }}</td>
+                <td>{{ s.mobile|default('N/A') }}</td>
+                <td>
+                  {% if s.status == 'Eligible' %}
+                    <span class="badge-status bg-eligible">Eligible</span>
+                  {% elif s.status == 'Placed' %}
+                    <span class="badge-status bg-placed">Placed</span>
+                  {% else %}
+                    <span class="badge-status bg-onhold">On Hold</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <div class="d-flex gap-2 flex-wrap">
+                    <a href="{{ url_for('tpo.view_student', id=s._id) }}" 
+                       class="btn btn-sm btn-outline-info">
+                      <i class="fas fa-eye"></i> View
+                    </a>
+
+                    <div class="dropdown">
+                      <button class="btn btn-sm btn-outline-light dropdown-toggle" 
+                              type="button" data-bs-toggle="dropdown">
+                        Update Status
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-dark">
+                        <li>
+                          <form method="POST" action="{{ url_for('tpo.update_status') }}">
+                            <input type="hidden" name="id" value="{{ s._id }}">
+                            <input type="hidden" name="status" value="Eligible">
+                            <button type="submit" class="dropdown-item text-success">Eligible</button>
+                          </form>
+                        </li>
+                        <li>
+                          <form method="POST" action="{{ url_for('tpo.update_status') }}">
+                            <input type="hidden" name="id" value="{{ s._id }}">
+                            <input type="hidden" name="status" value="On Hold">
+                            <button type="submit" class="dropdown-item text-warning">On Hold</button>
+                          </form>
+                        </li>
+                        <li>
+                          <form method="POST" action="{{ url_for('tpo.update_status') }}">
+                            <input type="hidden" name="id" value="{{ s._id }}">
+                            <input type="hidden" name="status" value="Placed">
+                            <button type="submit" class="dropdown-item text-info">Placed</button>
+                          </form>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="9" class="text-center py-5 text-muted">
+                  No students found in the database
+                </td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Simple client-side search -->
+  <script>
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const filter = this.value.toLowerCase();
+      const rows = document.querySelectorAll('#studentsTable tbody tr');
+
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(filter) ? '' : 'none';
+      });
+    });
+  </script>
+
+</body>
+</html>
