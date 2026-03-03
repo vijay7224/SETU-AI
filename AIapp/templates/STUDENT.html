@@ -273,33 +273,59 @@
   </div>
 </div>
 
-    <div class="col-md-3 col-sm-6">
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
-        <h6>Skill Gap Analysis</h6>
-        <p>Discover missing skills</p>
-        <button class="btn btn-outline-primary btn-sm mt-2">Analyze Now</button>
-      </div>
+   <div class="col-md-3 col-sm-6">
+  <div class="feature-card text-center">
+
+    <div class="feature-icon">
+      <i class="fas fa-chart-line"></i>
     </div>
 
-    <div class="col-md-3 col-sm-6">
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-microphone"></i></div>
-        <h6>Mock Interview</h6>
-        <p>Practice with AI interviewer</p>
-        <button class="btn btn-outline-primary btn-sm mt-2">Start Session</button>
-      </div>
-    </div>
+    <h6>Skill Gap Analysis</h6>
+    <p>Discover missing skills</p>
 
-    <div class="col-md-3 col-sm-6">
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-tasks"></i></div>
-        <h6>Assessments</h6>
-        <p>Multi-level skill evaluation</p>
-        <button class="btn btn-outline-primary btn-sm mt-2">Take Test</button>
-      </div>
-    </div>
+    <a href="{{ url_for('student.prediction') }}"
+       class="btn btn-outline-primary btn-sm mt-2">
+       Analyze Now
+    </a>
+
   </div>
+</div>
+
+    <div class="col-md-3 col-sm-6">
+  <div class="feature-card text-center">
+
+    <div class="feature-icon">
+      <i class="fas fa-microphone"></i>
+    </div>
+
+    <h6>Mock Interview</h6>
+    <p>Practice with AI interviewer</p>
+
+    <a href="{{ url_for('student.mock') }}"
+       class="btn btn-outline-primary btn-sm mt-2">
+       Start Session
+    </a>
+
+  </div>
+</div>
+
+   <div class="col-md-3 col-sm-6">
+  <div class="feature-card text-center">
+
+    <div class="feature-icon">
+      <i class="fas fa-tasks"></i>
+    </div>
+
+    <h6>Assessments</h6>
+    <p>Multi-level skill evaluation</p>
+
+    <a href="{{ url_for('student.chatbot') }}"
+       class="btn btn-outline-primary btn-sm mt-2">
+       Take Test
+    </a>
+
+  </div>
+</div>
 
   <!-- Status Cards -->
   <div class="row g-4">
