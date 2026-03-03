@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard – SETU</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <style>
+    :root {
+      --primary:     #00d4ff;
+      --primary-dark:#00aaff;
+      --glass:       rgba(255, 255, 255, 0.07);
+      --glass-border:rgba(0, 212, 255, 0.18);
+      --text:        #f0f4ff;
+      --text-muted:  rgba(240, 244, 255, 0.75);
+      --shadow:      0 12px 40px rgba(0, 0, 0, 0.55);
+    }
+
+    body {
+      background: linear-gradient(135deg, #1f1c2c 0%, #2a1b4d 50%, #0f2027 100%);
+      background-size: 300% 300%;
+      animation: gradientFlow 18s ease infinite;
+      color: var(--text);
+      min-height: 100vh;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    @keyframes gradientFlow {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      min-height: 100vh;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid var(--glass-border);
+      position: fixed;
+      z-index: 1000;
+      box-shadow: 4px 0 20px rgba(0,0,0,0.4);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 1.8rem 1.5rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+    }
+
+    .sidebar-header h5 {
+      color: #00ffd5;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      margin: 0;
+      text-transform: uppercase;
+      font-size: 1.3rem;
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar a i {
+      width: 24px;
+      margin-right: 14px;
+      font-size: 1.15rem;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: rgba(0, 212, 255, 0.12);
+      color: #00ffd5;
+      transform: translateX(8px);
+    }
+
+    .sidebar a.active {
+      border-left: 4px solid #00ffd5;
+    }
+
+    .sidebar a.text-danger:hover {
+      background: rgba(255, 76, 76, 0.15);
+      color: #ff6b6b;
+    }
+
+    /* Main content */
+    .main-content {
+      margin-left: 260px;
+      padding: 2.5rem 2rem;
+      min-height: 100vh;
+    }
+
+    /* Welcome Card */
+    .welcome-card {
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1.4rem;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2.5rem;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .welcome-card h4 {
+      color: #00ffd5;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .badge-points {
+      background: rgba(0, 212, 255, 0.18);
+      color: #00ffd5;
+      border: 1px solid rgba(0, 212, 255, 0.35);
+      font-weight: 600;
+      padding: 0.7em 1.3em;
+    }
+
+    /* Feature Cards */
+    .feature-card {
+      background: var(--glass);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1.2rem;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: all 0.35s ease;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+      animation: fadeInUp 1s ease-out forwards;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 20px 50px rgba(0, 212, 255, 0.25);
+    }
+
+    .feature-icon {
+      width: 70px;
+      height: 70px;
+      background: rgba(0, 212, 255, 0.15);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      color: #00ffd5;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin: 0 auto 1rem;
+    }
+
+    .feature-card h6 {
+      color: #00ffd5;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.2rem;
+    }
+
+    /* Status Cards */
+    .status-card {
+      background: var(--glass);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1.2rem;
+      padding: 1.8rem;
+      box-shadow: var(--shadow);
+      transition: all 0.35s ease;
+      animation: fadeInUp 1.1s ease-out forwards;
+    }
+
+    .status-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 18px 45px rgba(0, 212, 255, 0.22);
+    }
+
+    .status-card h6 {
+      color: #00ffd5;
+      font-weight: 600;
+    }
+
+    .status-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    @media (max-width: 992px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.show {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h5>Student Portal</h5>
+  </div>
+  <a href="/student/dashboard" class="active"><i class="fas fa-home"></i> Dashboard</a>
+  <a href="{{ url_for('student.prediction') }}"><i class="fas fa-brain"></i> Skill Gap</a>
+  <a href="{{ url_for('student.mock') }}"><i class="fas fa-microphone-lines"></i> Mock Interview</a>
+  <a href="{{ url_for('student.chatbot') }}"><i class="fas fa-clipboard-check"></i> AI ChatBot</a>
+  <a href="{{ url_for('student.jobs') }}"><i class="fas fa-briefcase"></i> Jobs</a>
+  <a href="/logout" ><i class="fas fa-briefcase"></i> Ranking</a>
+  <a href="{{ url_for('student.logout') }}"class="text-danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+
+  <!-- Welcome Card -->
+  <div class="welcome-card d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div>
+      <h4>Welcome, {{ name }} 👋</h4>
+      <p class="mb-0 opacity-85">{{ branch }} | Enrollment: {{ enrollment }}</p>
+    </div>
+    <span class="badge badge-points">
+      <i class="fas fa-star me-1"></i> {{ points }} pts
+    </span>
+  </div>
+
+  <!-- Feature Cards -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-3 col-sm-6">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-robot"></i></div>
+        <h6>Career Prediction</h6>
+        <p>AI-based career path suggestion</p>
+        <button class="btn btn-outline-primary btn-sm mt-2">Explore</button>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+        <h6>Skill Gap Analysis</h6>
+        <p>Discover missing skills</p>
+        <button class="btn btn-outline-primary btn-sm mt-2">Analyze Now</button>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-microphone"></i></div>
+        <h6>Mock Interview</h6>
+        <p>Practice with AI interviewer</p>
+        <button class="btn btn-outline-primary btn-sm mt-2">Start Session</button>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-tasks"></i></div>
+        <h6>Assessments</h6>
+        <p>Multi-level skill evaluation</p>
+        <button class="btn btn-outline-primary btn-sm mt-2">Take Test</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Cards -->
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="status-card">
+        <h6> View Profile</h6>
+        <p class="opacity-85">Your profile is 68% complete</p>
+       <a href="{{ url_for('student.view_student', id=session.get('user_id')) }}"
+   class="btn btn-primary btn-sm">
+   <i class="fas fa-edit me-2"></i> Update Profile
+</a>
+
+
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="status-card">
+        <h6>Documents</h6>
+        <p class="opacity-85">Upload marksheets & certificates</p>
+        <button class="btn btn-primary btn-sm">
+          <i class="fas fa-upload me-2"></i> Upload Documents
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Mobile Sidebar Toggle -->
+<button class="btn btn-primary d-lg-none position-fixed bottom-0 start-0 m-4 rounded-circle shadow-lg" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" style="width:60px;height:60px;z-index:1100;">
+  <i class="fas fa-bars fs-4"></i>
+</button>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
